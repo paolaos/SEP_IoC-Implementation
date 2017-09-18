@@ -1,6 +1,6 @@
 <grapes>
 	<grape id = "MovieLister" class = "grapeVine.MovieLister" scope = "singleton" init-method = "init" autowire="true">
-		<seed name="finder" type="MovieFinder"/>
+		<seed name="finder" type="MovieFinder" isReferenced="true"/>
 	</grape>
 	<grape id = "MovieFinder" class = "grapeVine.MovieFinder" scope = "prototype">
 		<seed name = "filename" type="String" value="movies1.txt"/>

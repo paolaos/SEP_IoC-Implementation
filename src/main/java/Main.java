@@ -8,12 +8,12 @@ import java.io.IOException;
 
 public class Main {
 
-   /* public static void main(String[] args) {
+   public static void main(String[] args) {
         GrapevineContext context = new XMLGrapevineContext(args[0]);
 
-    } */
+    }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
 
         if (args.length == 0) {
             System.out.println("Usage: java nu.xom.samples.NodeLister URL");
@@ -61,7 +61,7 @@ public class Main {
             System.out.print(' ');
         }
 
-    }
+    }*/
 
 }
 

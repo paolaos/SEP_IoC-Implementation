@@ -7,10 +7,24 @@ public class Seed {
     private Object value;
     private boolean isRef;
 
-    public Seed(Class seedClass, String id, Object value, boolean isRef){
+
+    public Class getSeedClass() {
+        return seedClass;
+    }
+
+    public void setSeedClass(Class seedClass) {
         this.seedClass = seedClass;
+    }
+
+    public void setId(String id) {
         this.id = id;
+    }
+
+    public void setValue(Object value) {
         this.value = value;
-        this.isRef = isRef;
+    }
+
+    public void setRef(boolean ref) {
+        isRef = ref;
     }
 }

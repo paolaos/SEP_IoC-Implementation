@@ -1,4 +1,4 @@
-import java.util.List;
+import java.lang.reflect.Method;
 
 /**
  * Created by Paola Ortega S on 9/17/2017.
@@ -7,20 +7,46 @@ public class Grape {
     private Class grapeClass;
     private boolean isSingleton;
     private String id;
-    private Object initMethod;
-    private Object destroyMethod;
-    //private List<Seed> list;
-
-    public Grape(Class grapeClass, boolean isSingleton, String id, Object initMethod, Object destroyMethod){
-        this.grapeClass = grapeClass;
-        this.isSingleton = isSingleton;
-        this.id = id;
-        this.initMethod = initMethod;
-        this.destroyMethod = destroyMethod;
-        //this.list = list;
-    }
+    private Method initMethod;
+    private Method destroyMethod;
 
     public Class getGrapeClass() {
         return grapeClass;
+    }
+
+    public boolean isSingleton() {
+        return isSingleton;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public Method getInitMethod() {
+        return initMethod;
+    }
+
+    public Method getDestroyMethod() {
+        return destroyMethod;
+    }
+
+    public void setGrapeClass(Class grapeClass) {
+        this.grapeClass = grapeClass;
+    }
+
+    public void setSingleton(boolean singleton) {
+        isSingleton = singleton;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setInitMethod(Method initMethod) {
+        this.initMethod = initMethod;
+    }
+
+    public void setDestroyMethod(Method destroyMethod) {
+        this.destroyMethod = destroyMethod;
     }
 }
