@@ -4,7 +4,6 @@
 
 import nu.xom.*;
 
-import javax.print.Doc;
 import java.io.IOException;
 
 public class XMLGrapevineContext extends GrapevineContext {
@@ -20,7 +19,7 @@ public class XMLGrapevineContext extends GrapevineContext {
             Builder parser = new Builder();
             Document doc = parser.build(argument);
             Element root = doc.getRootElement();
-            listChildren(root, 0);
+            listChildren(root, null);
         }
         catch (ParsingException ex) {
             System.out.println(argument + " is not well-formed.");
@@ -34,27 +33,37 @@ public class XMLGrapevineContext extends GrapevineContext {
         }
     }
 
-    private void listChildren(Node current, int depth) {
-
-        printSpaces(depth);
-        String name = "";
-        if (current instanceof Element) {
+    private void listChildren(Node current, Node previous) {
+        if(current instanceof Element){
             Element temp = (Element) current;
-            name = ": " + temp.getQualifiedName();
+            switch(temp.getQualifiedName()) {
+                case ("grapes"):
+                    break;
+                case ("grape"):
+                    //sacarlos atributos que tiene el tag
+                    //validar que están los obligatorios
+                    //meter todos los atributos que hay a un new grape
+                    //poner el grape en una lista
+                    //poner el grape en el hashmap
+                    break;
+                case ("seed"):
+                    //sacar los atributos que tiene el tag
+                    //validar que están los obligatorios
+                    //meter todos los atributos que hay a un new seed
+                    //poner el seed en el hashmap del grape existente
+                    break;
+
+                default:
+                    throw new IllegalArgumentException("Invalid input in XML " );
+            }
         }
-        System.out.println(current.getClass().getName() + name);
+
         for (int i = 0; i < current.getChildCount(); i++) {
-            listChildren(current.getChild(i), depth+1);
+            listChildren(current.getChild(i), current);
         }
 
     }
 
-    private void printSpaces(int n) {
 
-        for (int i = 0; i < n; i++) {
-            System.out.print(' ');
-        }
-
-    }
 
 }

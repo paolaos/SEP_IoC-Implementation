@@ -9,15 +9,15 @@ public class Grape {
     private String id;
     private Object initMethod;
     private Object destroyMethod;
-    private List<Seed> list;
+    //private List<Seed> list;
 
-    public Grape(Class grapeClass, boolean isSingleton, String id, Object initMethod, Object destroyMethod, List<Seed> list){
+    public Grape(Class grapeClass, boolean isSingleton, String id, Object initMethod, Object destroyMethod){
         this.grapeClass = grapeClass;
         this.isSingleton = isSingleton;
         this.id = id;
         this.initMethod = initMethod;
         this.destroyMethod = destroyMethod;
-        this.list = list;
+        //this.list = list;
     }
 
     public Class getGrapeClass() {
