@@ -13,6 +13,7 @@ public class Main {
 
     }
 
+    //esto era una prueba básica del parseo por XOM
     /*public static void main(String[] args) {
 
         if (args.length == 0) {
