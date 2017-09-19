@@ -7,6 +7,13 @@ public class Seed {
     private Object value;
     private boolean isRef;
 
+    public Seed(){
+        seedClass = null;
+        id = "";
+        value = null;
+        isRef = false;
+    }
+
 
     public Class getSeedClass() {
         return seedClass;

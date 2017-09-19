@@ -10,6 +10,15 @@ public class Grape {
     private Method initMethod;
     private Method destroyMethod;
 
+    public Grape(){
+        grapeClass = null;
+        isSingleton = false;
+        id = "";
+        initMethod = null;
+        destroyMethod = null;
+
+    }
+
     public Class getGrapeClass() {
         return grapeClass;
     }

@@ -10,6 +10,8 @@ public class Main {
 
    public static void main(String[] args) {
         GrapevineContext context = new XMLGrapevineContext(args[0]);
+        context.growGrapes();
+
 
     }
 

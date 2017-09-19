@@ -5,13 +5,13 @@ import java.util.*;
  */
 public abstract class GrapevineContext {
     protected Map<String, Grape> grapes; //identifies all grapes with its name for a faster search
-    protected HashMap<Grape, Seed> dependencies; //associates grapes with its seeds
-    protected Map<Grape, Object> singletonGrapes; //places singleton grapes with instantiated objects
+    protected Map<String, Seed> dependencies; //associates grapes with its seeds TODO cambiar de grape a seeds en el key
+    protected Map<String, Object> singletonGrapes; //places singleton grapes with instantiated objects
 
     public GrapevineContext(){
-        dependencies = new LinkedHashMap<>(); //todo revisar estructuras que las puse a lo charral
-        singletonGrapes = new LinkedHashMap<>();
-        grapes = new LinkedHashMap<>();
+        dependencies = new TreeMap<>();
+        singletonGrapes = new TreeMap<>();
+        grapes = new TreeMap<>();
     }
 
     protected abstract void growGrapes(); //implementation varies based on the source of information
@@ -21,7 +21,7 @@ public abstract class GrapevineContext {
         Grape grape = grapes.get(id);
         Object result = new Object();
         if(grape.isSingleton())
-            result =  this.singletonGrapes.get(grape);
+            result =  this.singletonGrapes.get(id);
 
         else {
             try {

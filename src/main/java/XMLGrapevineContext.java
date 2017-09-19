@@ -84,7 +84,7 @@ public class XMLGrapevineContext extends GrapevineContext {
      */
     private void createGrape(Element temp) {
         Grape grape = new Grape(); //new instance of Grape
-        for(int i = 0; i < temp.getChildCount(); i++) { //iterates through all the attributes placed by the user
+        for(int i = 0; i < temp.getAttributeCount(); i++) { //iterates through all the attributes placed by the user
             Attribute attribute = temp.getAttribute(i); //instantiates a specific attribute (eg. id = "1")
             String name = attribute.getQualifiedName(); //takes the attribute name (eg. id)
             String value = attribute.getValue(); //takes the attribute value (eg. "1")
@@ -107,7 +107,7 @@ public class XMLGrapevineContext extends GrapevineContext {
                     if(value.equals("singleton")) {
                         try {
                             grape.setSingleton(true);
-                            super.singletonGrapes.put(grape, grape.getGrapeClass().newInstance()); //create a new instance of the grape and store it in its map
+                            super.singletonGrapes.put(grape.getId(), grape.getGrapeClass().newInstance()); //create a new instance of the grape and store it in its map
 
                         } catch (IllegalAccessException il) {
                             il.printStackTrace();
@@ -121,11 +121,11 @@ public class XMLGrapevineContext extends GrapevineContext {
 
                     break;
 
-                case ("initMethod"):
+                case ("init-method"):
                     if (grape.getGrapeClass() != null) {
                         Class grapeClass = grape.getGrapeClass();
                         try {
-                            grape.setInitMethod(grapeClass.getMethod(value, null)); //todo no sé si deberíamos considerar parámetros
+                            grape.setInitMethod(grapeClass.getMethod(value, null));
                         } catch (NoSuchMethodException e) {
                             e.printStackTrace();
                         }
@@ -134,7 +134,7 @@ public class XMLGrapevineContext extends GrapevineContext {
                     }
                     break;
 
-                case ("destroyMethod"):
+                case ("destroy-method"):
                     if (grape.getGrapeClass() != null) {
                         Class grapeClass = grape.getGrapeClass();
                         try {
@@ -145,6 +145,9 @@ public class XMLGrapevineContext extends GrapevineContext {
                     } else {
                         System.err.print("Grape parameters not in correct order. Class should be before methods. ");
                     }
+                    break;
+
+                case ("property"):
                     break;
 
                 default:
@@ -166,7 +169,7 @@ public class XMLGrapevineContext extends GrapevineContext {
      */
     private void createSeed(Element temp) {
         Seed seed = new Seed();
-        for(int i = 0; i < temp.getChildCount(); i++) { //same principle as createGrape
+        for(int i = 0; i < temp.getAttributeCount(); i++) { //same principle as createGrape
             Attribute attribute = temp.getAttribute(i);
             String name = attribute.getQualifiedName();
             String value = attribute.getValue();
@@ -180,12 +183,16 @@ public class XMLGrapevineContext extends GrapevineContext {
                     try {
                         seed.setSeedClass(Class.forName(value));
                     } catch (ReflectiveOperationException e) {
-                        e.printStackTrace();
+                        Class className = this.isPrimitive(value);
+                        if(className == null)
+                            e.printStackTrace();
+                        else
+                            seed.setSeedClass(className);
                     }
                     break;
 
                 case ("isReferenced"):
-                    seed.setRef(Boolean.getBoolean(value));
+                    seed.setRef(Boolean.valueOf(value)); //TODO considerar que se hace si es true
                     break;
 
                 case ("value"):
@@ -205,9 +212,62 @@ public class XMLGrapevineContext extends GrapevineContext {
         }
 
         Element parent = (Element) temp.getParent();
-        Grape parentGrape = grapes.get(parent.getQualifiedName());
-        super.dependencies.put(parentGrape, seed); //map should store seeds that belong to the same grape TODO revisar estructura
+        Grape parentGrape = grapes.get(parent.getAttributeValue("id"));
 
+        super.dependencies.put(parentGrape.getId(), seed); //map should store seeds that belong to the same grape TODO revisar estructura
+
+
+
+    }
+
+    private Class isPrimitive(String className) {
+        Class result = null;
+        switch (className) {
+            case ("Byte"):
+            case ("byte"):
+                result = Byte.class;
+                break;
+
+            case ("Short"):
+            case ("short"):
+                result = Short.class;
+                break;
+
+            case ("Integer"):
+            case ("int"):
+                result = Integer.class;
+                break;
+
+            case ("Long"):
+            case ("long"):
+                result = Long.class;
+                break;
+
+            case ("Float"):
+            case ("float"):
+                result = Float.class;
+                break;
+
+            case ("Double"):
+            case ("double"):
+                result = Double.class;
+                break;
+
+            case ("Boolean"):
+            case ("boolean"):
+                result = Boolean.class;
+                break;
+
+            case ("Character"):
+            case ("char"):
+                result = Character.class;
+                break;
+            case("String"):
+                result = String.class;
+                break;
+
+        }
+        return result;
     }
 
 
