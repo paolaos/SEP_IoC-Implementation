@@ -9,7 +9,7 @@ import java.io.IOException;
 public class Main {
 
    public static void main(String[] args) {
-        GrapevineContext context = new XMLGrapevineContext(args[0]);
+        GrapevineContext context = new XMLGrapevineContext("Prueba.xml");
         context.growGrapes();
 
 
