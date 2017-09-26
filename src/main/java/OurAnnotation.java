@@ -1,3 +1,6 @@
+/**
+ * Annotations para las grapes
+ */
 @interface OurAnnotation {
     String id();
     String name();
@@ -7,6 +10,9 @@
     String property();
 }
 
+/**
+ * Annotations para las seeds
+ */
 @interface OurLittleAnnotation {
     String name();
     String type();
