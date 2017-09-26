@@ -4,6 +4,7 @@ import sun.java2d.pipe.OutlineTextRenderer;
 import java.lang.annotation.*;
 
 public class AnnotationsGrapevineContext extends GrapevineContext {
+    String path;
 
     public void fillAnnotations(Class annotated)  {
         Annotation[] annotations = annotated.getAnnotations();
@@ -25,8 +26,14 @@ public class AnnotationsGrapevineContext extends GrapevineContext {
             }
         }
     }
+
+    public AnnotationsGrapevineContext(String path){
+        this.path = path;
+        //TODO validar que path existe
+    }
+
     @Override
     protected void growGrapes() {
-
+        //TODO extraer cada una de las clases a traves del path y aplicar fillAnnotations foreach
     }
 }
