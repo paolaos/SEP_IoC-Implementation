@@ -1,8 +1,11 @@
 <grapes>
-	<grape id = "Examples.MovieLister" class = "Examples.MovieLister" scope = "singleton" init-method = "init" property="type">
-		<seed name="finder" type="Examples.MovieFinder" isReferenced="true"/>
+	<grape id = "LightTestSetter" class = "LightTestSetter" scope = "singleton" init-method = "init" property="type">
+		<seed name="switch" type="String" constructor="false" isReferenced="false" value="bOOOM1"/>
 	</grape>
-	<grape id = "Examples.MovieFinder" class = "Examples.MovieFinder" scope = "prototype">
-		<seed name = "filename" type="String" value="movies1.txt"/>
+	<grape id = "LightTestConstructor" class = "LightTestConstructor" scope = "singleton" init-method = "init" property="type">
+		<seed name="switch" type="String" constructor="true" isReferenced="false" value="bOOOM2"/>
+	</grape>
+	<grape id = "Etek" class = "EtekcityTest" scope = "singleton" init-method = "init" property="type">
+		<seed name="state" type="String" constructor="false" isReferenced="false" value="bOOOM3"/>
 	</grape>
 </grapes>
