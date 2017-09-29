@@ -1,10 +1,11 @@
-/**
+package Context; /**
  * Created by Paola Ortega S on 9/17/2017.
  */
 
 import nu.xom.*;
 
 import java.io.IOException;
+import Objects.*;
 
 
 public class XMLGrapevineContext extends GrapevineContext {
@@ -83,7 +84,7 @@ public class XMLGrapevineContext extends GrapevineContext {
      * @param temp current Element to be instantiated as grape.
      */
     private void createGrape(Element temp) {
-        Grape grape = new Grape(); //new instance of Grape
+        Grape grape = new Grape(); //new instance of Objects.Grape
         for(int i = 0; i < temp.getAttributeCount(); i++) { //iterates through all the attributes placed by the user
             Attribute attribute = temp.getAttribute(i); //instantiates a specific attribute (eg. id = "1")
             String name = attribute.getQualifiedName(); //takes the attribute name (eg. id)
@@ -130,7 +131,7 @@ public class XMLGrapevineContext extends GrapevineContext {
                             e.printStackTrace();
                         }
                     } else {
-                        System.err.print("Grape parameters not in correct order. Class should be before methods. ");
+                        System.err.print("Objects.Grape parameters not in correct order. Class should be before methods. ");
                     }
                     break;
 
@@ -143,7 +144,7 @@ public class XMLGrapevineContext extends GrapevineContext {
                             e.printStackTrace();
                         }
                     } else {
-                        System.err.print("Grape parameters not in correct order. Class should be before methods. ");
+                        System.err.print("Objects.Grape parameters not in correct order. Class should be before methods. ");
                     }
                     break;
 
@@ -199,7 +200,7 @@ public class XMLGrapevineContext extends GrapevineContext {
                     if(seed.getSeedClass() != null) {
                         seed.setValue(value);
                     } else {
-                        System.err.print("Seed parameters not in correct order. Type should be before values.");
+                        System.err.print("Objects.Seed parameters not in correct order. Type should be before values.");
                     }
                     break;
 

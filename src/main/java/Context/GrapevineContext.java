@@ -1,11 +1,14 @@
+package Context;
+
 import java.util.*;
+import Objects.*;
 
 /**
  * Created by Paola Ortega S on 9/17/2017.
  */
 public abstract class GrapevineContext {
     protected Map<String, Grape> grapes; //identifies all grapes with its name for a faster search
-    protected Map<String, Seed> dependencies; //associates grapes with its seeds TODO cambiar de grape a seeds en el key
+    protected Map<String, Seed> dependencies; //associates grapes id with its seeds
     protected Map<String, Object> singletonGrapes; //places singleton grapes with instantiated objects
 
     public GrapevineContext(){
