@@ -3,13 +3,33 @@
  */
 import Context.GrapevineContext;
 import Context.XMLGrapevineContext;
+import Examples.LightTestConstructor;
+import Examples.LightTestRef;
+import Examples.LightTestSetter;
 
 
 public class Main {
-
+    private static final int test = 1;
    public static void main(String[] args) {
         GrapevineContext context = new XMLGrapevineContext("Prueba.xml");
-        //context.growGrapes();
+       //context.growGrapes();
+       //context.buildWithSetters();
+       context.buildWithConstructors();
+
+       switch(test){//Pruebas
+           case 0:
+               LightTestSetter obj = (LightTestSetter) context.getGrape("LightTestSetter");
+               obj.on();
+               break;
+           case 1:
+               LightTestConstructor obj2 = (LightTestConstructor) context.getGrape("LightTestConstructor");
+               obj2.on();
+               break;
+           case 2:
+               LightTestRef obj3 = (LightTestRef) context.getGrape("Light");
+               obj3.on();
+               break;
+       }
 
 
     }

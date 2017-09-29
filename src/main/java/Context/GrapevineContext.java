@@ -8,7 +8,7 @@ import Objects.*;
  */
 public abstract class GrapevineContext {
     protected Map<String, Grape> grapes; //identifies all grapes with its name for a faster search
-    protected Map<String, Seed> dependencies; //associates grapes id with its seeds
+    protected Map<String, List<Seed>> dependencies; //associates grapes id with its seeds
     protected Map<String, Object> singletonGrapes; //places singleton grapes with instantiated objects
 
     public GrapevineContext(){
@@ -17,7 +17,9 @@ public abstract class GrapevineContext {
         grapes = new TreeMap<>();
     }
 
-    protected abstract void growGrapes(); //implementation varies based on the source of information
+    public abstract void growGrapes(); //implementation varies based on the source of information
+    public abstract void buildWithSetters();
+    public abstract void buildWithConstructors();
 
     //method works the same regardless of the source of information, since it works with the three data structures
     public Object getGrape(String id){

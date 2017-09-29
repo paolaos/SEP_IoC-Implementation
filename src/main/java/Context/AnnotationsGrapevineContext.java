@@ -59,7 +59,7 @@ public class AnnotationsGrapevineContext extends GrapevineContext {
     }
 
     @Override
-    protected void growGrapes() {
+    public void growGrapes() {
         reflections = new Reflections(path);
         Set<Class<? extends Object>> classSet = reflections.getSubTypesOf(Object.class);
 
@@ -73,6 +73,16 @@ public class AnnotationsGrapevineContext extends GrapevineContext {
 
 
 
+
+    }
+
+    @Override
+    public void buildWithSetters() {
+
+    }
+
+    @Override
+    public void buildWithConstructors() {
 
     }
 
@@ -124,10 +134,7 @@ public class AnnotationsGrapevineContext extends GrapevineContext {
             grape.setInitMethod(destroyMethod);
 
         }
-
         super.grapes.put(className, grape);
-
-
     }
 
 
