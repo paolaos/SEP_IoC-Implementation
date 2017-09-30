@@ -69,15 +69,6 @@ public class AnnotationsGrapevineContext extends GrapevineContext {
         }
     }
 
-    @Override
-    public void buildWithSetters() {
-
-    }
-
-    @Override
-    public void buildWithConstructors() {
-
-    }
 
     private void createGrapeAnnotation(Class currentClass){
         String className = currentClass.getSimpleName();

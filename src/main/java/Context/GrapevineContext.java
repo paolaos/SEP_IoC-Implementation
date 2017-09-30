@@ -18,8 +18,6 @@ public abstract class GrapevineContext {
     }
 
     public abstract void growGrapes(); //implementation varies based on the source of information
-    public abstract void buildWithSetters();
-    public abstract void buildWithConstructors();
 
     //method works the same regardless of the source of information, since it works with the three data structures
     public Object getGrape(String id){
