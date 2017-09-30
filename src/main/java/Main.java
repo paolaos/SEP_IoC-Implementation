@@ -9,11 +9,11 @@ import Examples.LightTestSetter;
 
 
 public class Main {
-    private static final int test = 1;
+    private static final int test = 0;
    public static void main(String[] args) {
         GrapevineContext context = new XMLGrapevineContext("Prueba.xml");
        //context.growGrapes();
-       //context.buildWithSetters();
+       context.buildWithSetters();
        context.buildWithConstructors();
 
        switch(test){//Pruebas
@@ -26,7 +26,7 @@ public class Main {
                obj2.on();
                break;
            case 2:
-               LightTestRef obj3 = (LightTestRef) context.getGrape("Light");
+               LightTestRef obj3 = (LightTestRef) context.getGrape("LightTestRef");
                obj3.on();
                break;
        }
