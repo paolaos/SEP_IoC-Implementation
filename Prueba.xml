@@ -5,7 +5,10 @@
 	<grape id = "LightTestConstructor" class = "LightTestConstructor" scope = "singleton" init-method = "init" property="type">
 		<seed name="switch" type="String" constructor="true" isReferenced="false" value="bOOOM2"/>
 	</grape>
-	<grape id = "Etek" class = "EtekcityTest" scope = "singleton" init-method = "init" property="type">
+	<grape id = "EtekcityTest" class = "EtekcityTest" scope = "singleton" init-method = "init" property="type">
 		<seed name="state" type="String" constructor="false" isReferenced="false" value="bOOOM3"/>
+	</grape>
+	<grape id = "LightTestRef" class = "LightTestRef" scope = "singleton" init-method = "init" property="type">
+		<seed name="Etek" type="EtekcityTest" constructor="false" isReferenced="true" value="EtekcityTest"/>
 	</grape>
 </grapes>
