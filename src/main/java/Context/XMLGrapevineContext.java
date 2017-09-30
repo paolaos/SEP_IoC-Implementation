@@ -2,14 +2,18 @@ package Context; /**
  * Created by Paola Ortega S on 9/17/2017.
  */
 
+import Annotations.AutowireGrape;
 import nu.xom.*;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Set;
 
 import Objects.*;
+import org.reflections.Reflections;
 
 
 public class XMLGrapevineContext extends GrapevineContext {
@@ -172,7 +176,27 @@ public class XMLGrapevineContext extends GrapevineContext {
      * @param temp current Element to be instantiated as seed.
      */
     private void createSeed(Element temp) {
+        /*Mas o menos así funciona el autowired para XML, es un sustituto para el campo de constructor en la construccion
+        * del XML*/
+        String namae = temp.getClass().getSimpleName();
+        Reflections currentClassReflectionTool = new Reflections("/" + namae);/*Falta el path pero no se que poner o conseguirlo*/
+        Set<Method> autowireGrape = currentClassReflectionTool.getMethodsAnnotatedWith(AutowireGrape.class);
+        Iterator<Method> iterator = autowireGrape.iterator();
+
+        /*Este seed es del método original*/
         Seed seed = new Seed();
+
+        /*Iterador del autowired*/
+        while (iterator.hasNext()) {/*Puede haber mas de una cosa con autowired*/
+            Method trialMethod = iterator.next();/*Pueden haber atributos con autowired, eso se filtra adelantico*/
+            if (trialMethod.getName().startsWith("set")) { /*Si el método marcado con autowired inicia con set, es setter*/
+                seed.setIsConstructor(false);
+            } else {
+                seed.setIsConstructor(true);
+            }
+        }
+
+        /*El resto normal*/
         for(int i = 0; i < temp.getAttributeCount(); i++) { //same principle as createGrape
             Attribute attribute = temp.getAttribute(i);
             String name = attribute.getQualifiedName();
