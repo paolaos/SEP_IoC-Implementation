@@ -66,9 +66,25 @@ public class AnnotationsGrapevineContext extends GrapevineContext {
         for(Class specificClass : classSet) {
             if(specificClass.isAnnotationPresent(GrapeAnnotation.class))
                 this.createGrapeAnnotation(specificClass);
+
+
+
         }
+
+
+
+
     }
 
+    @Override
+    public void buildWithSetters() {
+
+    }
+
+    @Override
+    public void buildWithConstructors() {
+
+    }
 
     private void createGrapeAnnotation(Class currentClass){
         String className = currentClass.getSimpleName();

@@ -9,21 +9,24 @@ import Examples.LightTestSetter;
 
 
 public class Main {
-    private static final int test = 0;//Cambiarlo para distintas pruebas
+    private static final int test = 1;
    public static void main(String[] args) {
         GrapevineContext context = new XMLGrapevineContext("Prueba.xml");
+       //context.growGrapes();
+       //context.buildWithSetters();
+       context.buildWithConstructors();
 
        switch(test){//Pruebas
-           case 0://Por set
+           case 0:
                LightTestSetter obj = (LightTestSetter) context.getGrape("LightTestSetter");
                obj.on();
                break;
-           case 1://Por Constructor
+           case 1:
                LightTestConstructor obj2 = (LightTestConstructor) context.getGrape("LightTestConstructor");
                obj2.on();
                break;
-           case 2://Por referencia
-               LightTestRef obj3 = (LightTestRef) context.getGrape("LightTestRef");
+           case 2:
+               LightTestRef obj3 = (LightTestRef) context.getGrape("Light");
                obj3.on();
                break;
        }
