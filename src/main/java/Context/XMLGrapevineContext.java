@@ -191,7 +191,7 @@ public class XMLGrapevineContext extends GrapevineContext {
             Method trialMethod = iterator.next();/*Pueden haber atributos con autowired, eso se filtra adelantico*/
             if (trialMethod.getName().startsWith("set")) { /*Si el método marcado con autowired inicia con set, es setter*/
                 seed.setIsConstructor(false);
-            } else {
+            } else if (trialMethod.getName().equals(namae)) {
                 seed.setIsConstructor(true);
             }
         }
