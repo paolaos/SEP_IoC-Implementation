@@ -185,7 +185,7 @@ public class XMLGrapevineContext extends GrapevineContext {
 
                 case ("type"):
                     try {
-                        seed.setSeedClass(Class.forName("Examples."+value));
+                        seed.setSeedClass(Class.forName(value));
                     } catch (ReflectiveOperationException e) {
                         Class className = this.isPrimitive(value);
                         if(className == null)
@@ -205,16 +205,7 @@ public class XMLGrapevineContext extends GrapevineContext {
 
                 case ("value"):
                     if(seed.getSeedClass() != null) {
-                        if(seed.isRef()){//Debo saber si meter un objeto o un valor
-                            String k =seed.getSeedClass().getSimpleName();
-                            Object h = singletonGrapes.get(k);
-                            if(h==null){
-                                h = this.isPrimitive(seed.getSeedClass().getSimpleName());
-                            }
-                            seed.setValue(h);
-                        }else{
-                            seed.setValue(value);
-                        }
+                        seed.setValue(value);
                     } else {
                         System.err.print("Objects.Seed parameters not in correct order. Type should be before values.");
                     }
@@ -234,11 +225,6 @@ public class XMLGrapevineContext extends GrapevineContext {
             super.dependencies.put(parentGrape.getId(),new LinkedList<Seed>());
         }
         super.dependencies.get(parentGrape.getId()).add(seed); //map should store seeds that belong to the same grape TODO revisar estructura
-        if(seed.isConstructor()){
-            buildWithConstructors(parentGrape.getId());
-        }else{
-            buildWithSetters(parentGrape.getId());
-        }
     }
 
     private Class isPrimitive(String className) {
@@ -293,64 +279,61 @@ public class XMLGrapevineContext extends GrapevineContext {
 
 
 
-    /**
-     * Este metodo crea un objeto que se crea con parametros por setters
-     * @param name es el nombre del grape de donde se va a crear el objeto
-     * */
-    public void buildWithSetters(String name){
-        Object obj=null;
-        Class<?> clss;
-        if(dependencies.get(name).get(0).isConstructor()==false){//Es por set?
-            try {
-                obj = grapes.get(name).getGrapeClass().newInstance();
-                singletonGrapes.put(name,obj);
-            } catch (InstantiationException e) {
-                e.printStackTrace();
-            } catch (IllegalAccessException e) {
-                e.printStackTrace();
-            }
-            clss = obj.getClass();
-            int j = 0;
-            try {
-                Object component = obj;
-                Method[] methods = clss.getMethods();
-                for(int i = 0; i<methods.length; i++) {
-                    Method meth = methods[i];
-                    String mname = meth.getName();
-                    Class[] types = meth.getParameterTypes();
-                    if(mname.startsWith("set") && types.length==1 && meth.getReturnType()==Void.TYPE) {
-                        meth.invoke(component, dependencies.get(name).get(j).getValue());//Llamo al set con el parametro q le toca
-                        j++;
-                    }
+    public void buildWithSetters(){
+        Object o=null;
+        Class<?> c;
+        for (String st: singletonGrapes.keySet()) {
+            if(dependencies.get(st).get(0).isConstructor()==false){
+                try {
+                    o = grapes.get(st).getGrapeClass().newInstance();
+                    singletonGrapes.put(st,o);
+                } catch (InstantiationException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
                 }
-            } catch( Exception ex) {
-                String msg = "Initialization error";
-                throw new RuntimeException( msg, ex);
+                c = o.getClass();
+                int j = 0;
+                try {
+                    Object component = o;
+                    Method[] methods = c.getMethods();
+                    for(int i = 0; i<methods.length; i++) {
+                        Method m = methods[i];
+                        String mname = m.getName();
+                        Class[] types = m.getParameterTypes();
+                        if(mname.startsWith("set") && types.length==1 && m.getReturnType()==Void.TYPE) {
+                            m.invoke(component, dependencies.get(st).get(j).getValue());
+                            j++;
+                        }
+                    }
+                } catch( Exception ex) {
+                    String msg = "Initialization error";
+                    throw new RuntimeException( msg, ex);
+                }
             }
         }
-
     }
-    /**
-     * Este metodo crea un objeto que se crea con parametros por constructor
-     * @param name es el nombre del grape de donde se va a crear el objeto
-     * */
-    public void buildWithConstructors(String name) {
-        Class<?> clss;
-        if(dependencies.get(name).get(0).isConstructor()==true){//Este grape es por constructor?
-            clss = grapes.get(name).getGrapeClass();
-            try {
-                Constructor[] constructors = clss.getDeclaredConstructors();//Obtengo los constructores
-                assert constructors.length!=1 : "Component must have single constructor";
-                Constructor cons = constructors[0];
-                Object[] params = new Object[dependencies.get(name).size()];//Arreglo de los parametros
-                for (int i = 0; i<dependencies.get(name).size();i++) {
-                    params[i]= dependencies.get(name).get(i).getValue();
+
+    public void buildWithConstructors() {
+        Object o=null;
+        Class<?> c;
+        for (String st: singletonGrapes.keySet()) {
+            if(dependencies.get(st).get(0).isConstructor()==true){
+                c = grapes.get(st).getGrapeClass();
+                try {
+                    Constructor[] constructors = c.getDeclaredConstructors();
+                    assert constructors.length!=1 : "Component must have single constructor";
+                    Constructor cc = constructors[0];
+                    Object[] params = new Object[dependencies.get(st).size()];
+                    for (int i = 0; i<dependencies.get(st).size();i++) {
+                        params[i]= dependencies.get(st).get(i).getValue();
+                    }
+                    Object component = cc.newInstance(params);
+                    singletonGrapes.put(st,component);
+                } catch( Exception ex) {
+                    String msg = "Initialization error";
+                    throw new RuntimeException( msg, ex);
                 }
-                Object component = cons.newInstance(params);
-                singletonGrapes.put(name,component);
-            } catch( Exception ex) {
-                String msg = "Initialization error";
-                throw new RuntimeException( msg, ex);
             }
         }
     }
