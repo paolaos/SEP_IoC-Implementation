@@ -3,13 +3,32 @@ package Objects;
 import java.lang.reflect.Method;
 
 /**
- * Created by Paola Ortega S on 9/17/2017.
+ * Grape is the object that is used to identify the objects that will be used for dependency injection. In Spring, it is the equivalent to a Bean instance.
  */
 public class Grape {
+    /**
+     * The type of object that will be used.
+     */
     private Class grapeClass;
+
+    /**
+     * Whether the user identified the object as a single instance or not.
+     */
     private boolean isSingleton;
+
+    /**
+     * The name that *this will be referenced as by both the user and the program
+     */
     private String id;
+
+    /**
+     * The method that will be invoked once an object's instance is created.
+     */
     private Method initMethod;
+
+    /**
+     * The method that will be invoked once an object's instance will be destroyed.
+     */
     private Method destroyMethod;
 
     public Grape(){

@@ -3,12 +3,24 @@ package Objects;
 /**
  * Created by Paola Ortega S on 9/17/2017.
  */
+
 /**
- * Created by Paola Ortega S on 9/17/2017.
+ * A seed consists of a dependency from a Grape. One grape can have multiple seeds.
  */
 public class Seed {
+    /**
+     * The type of object that will be used.
+     */
     private Class seedClass;
+
+    /**
+     * The name that *this will be referenced as by both the user and the program
+     */
     private String id;
+
+    /**
+     * The instance that is stored
+     */
     private Object value;
     private boolean isRef;
     private boolean isCons;

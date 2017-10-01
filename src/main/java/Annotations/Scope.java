@@ -6,9 +6,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by Paola Ortega S on 9/28/2017.
+ * Defines the scope of the object. There are two options: Singleton is used to store an initialized instance of the grape, prototype for the opposite.
  */
-@Target(ElementType.METHOD)
+@Target(value = { ElementType.METHOD, ElementType.CONSTRUCTOR})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface Scope {
     String scope() default "prototype";
