@@ -1,3 +1,6 @@
+/**
+ * Basic functional examples are set here in order the test the program's functionality
+ */
 package Examples;
 
 import Annotations.*;

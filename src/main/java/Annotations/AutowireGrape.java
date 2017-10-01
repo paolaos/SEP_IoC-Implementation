@@ -1,3 +1,6 @@
+/**
+ * This contains all the annotations used to inject dependencies
+ */
 package Annotations;
 
 import java.lang.annotation.ElementType;
