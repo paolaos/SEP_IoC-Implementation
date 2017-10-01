@@ -1,3 +1,7 @@
+/**
+ * Here, the context is set based on two user input types: XML files or annotations.
+ * In both cases, the grapes are identified, seeds are associated and finally everything gets stored and ready to be used by the user in execution time.
+ */
 package Context;
 
 import Annotations.*;

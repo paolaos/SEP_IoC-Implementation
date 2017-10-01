@@ -1,12 +1,11 @@
-/**
- * Created by Paola Ortega S on 9/17/2017.
- */
 
 import Context.*;
 
 import Examples.*;
 
-
+/**
+ * Main target class to test the Examples package.
+ */
 public class Main {
     private static final int test = 0;//Cambiarlo para distintas pruebas
    public static void main(String[] args) {
