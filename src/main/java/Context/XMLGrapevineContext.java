@@ -169,8 +169,9 @@ public class XMLGrapevineContext extends GrapevineContext {
                             autowired =! autowired;
                             grape.setAutowiring("name");
                         } else if (value.equals("no") && autowired)  {
-                            searchAndCreateDep(grape);
-                            return;
+                            if (searchAndCreateDep(grape)) {
+                                return;
+                            }
                         }
                     } else {
                         System.err.print("Objects.Grape parameters not in correct order. Class should be before methods. ");
@@ -185,7 +186,7 @@ public class XMLGrapevineContext extends GrapevineContext {
         super.grapes.put(grape.getId(), grape);
     }
 
-    private void searchAndCreateDep(Grape grape) {
+    private boolean searchAndCreateDep(Grape grape) {
         Set<String> keySet = grapes.keySet();
         for (String key : keySet) {
             Grape toAnalyze = grapes.get(key);
@@ -194,16 +195,19 @@ public class XMLGrapevineContext extends GrapevineContext {
             try {
                 Field privateField = toAnalyzeClass.getDeclaredField(grape.getId());
                 if (privateField != null) {
-                    grapeToSeed(grape, key);
+                    super.dependencies.get(key).add(grapeToSeed(grape, key));
+                    return true;
                 }
             } catch (NoSuchFieldException e) {
                 for (Field field : fields) {
                     if (field.toString().equalsIgnoreCase(grape.getId())) {
-                        grapeToSeed(grape, key);
+                        super.dependencies.get(key).add(grapeToSeed(grape, key));
+                        return true;
                     }
                 }
             }
         }
+        return false;
     }
 
     private Seed grapeToSeed(Grape grape, String dad) {
