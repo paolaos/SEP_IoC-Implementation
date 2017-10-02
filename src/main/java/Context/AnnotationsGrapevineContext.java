@@ -38,7 +38,6 @@ public class AnnotationsGrapevineContext extends GrapevineContext {
             growGrapes();
         }
         else System.err.print("Invalid path. ");
-
     }
 
     /**

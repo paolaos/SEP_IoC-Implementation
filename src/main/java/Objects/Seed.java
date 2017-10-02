@@ -58,15 +58,18 @@ public class Seed {
         return seedClass;
     }
 
-    public String getid(){
+    public String getId(){
         return id;
     }
+
     public Object getValue(){
         return value;
     }
+
     public boolean isConstructor(){
         return isCons;
     }
+
     public boolean isRef(){
         return isRef;
     }

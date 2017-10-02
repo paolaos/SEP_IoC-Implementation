@@ -34,13 +34,18 @@ public class Grape {
      */
     private Method destroyMethod;
 
+    /**
+     * Whether the user identified the autowired as type, name or not using autowired at all
+     * */
+    private String autowiring;
+
     public Grape(){
         grapeClass = null;
         isSingleton = false;
         id = "";
         initMethod = null;
         destroyMethod = null;
-
+        autowiring = "no";
     }
 
     public Class getGrapeClass() {
@@ -63,6 +68,8 @@ public class Grape {
         return destroyMethod;
     }
 
+    public String getAutowiring() { return autowiring; }
+
     public void setGrapeClass(Class grapeClass) {
         this.grapeClass = grapeClass;
     }
@@ -82,4 +89,6 @@ public class Grape {
     public void setDestroyMethod(Method destroyMethod) {
         this.destroyMethod = destroyMethod;
     }
+
+    public void setAutowiring(String autowiring) { this.autowiring = autowiring; }
 }

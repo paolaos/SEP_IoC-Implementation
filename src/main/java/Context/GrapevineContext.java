@@ -11,6 +11,11 @@ import Objects.*;
  */
 public abstract class GrapevineContext {
     /**
+     * Identifies all the grapes associated to another grape by the autowire annotation
+     * */
+    protected Map<String, List<Grape>> autowiredDependencies;
+
+    /**
      * Identifies all grapes with its name for a faster search
      */
     protected Map<String, Grape> grapes;
@@ -26,6 +31,7 @@ public abstract class GrapevineContext {
     protected Map<String, Object> singletonGrapes;
 
     public GrapevineContext(){
+        autowiredDependencies = new TreeMap<>();
         dependencies = new TreeMap<>();
         singletonGrapes = new TreeMap<>();
         grapes = new TreeMap<>();
@@ -49,7 +55,6 @@ public abstract class GrapevineContext {
         Object result = new Object();
         if(grape.isSingleton())
             result =  this.singletonGrapes.get(id);
-
         else {
             try {
                 result = grapes.get(id).getGrapeClass().newInstance();
@@ -57,9 +62,7 @@ public abstract class GrapevineContext {
                 e.printStackTrace();
             }
         }
-
         return result;
-
     }
 
     /**
@@ -121,6 +124,4 @@ public abstract class GrapevineContext {
             }
         }
     }
-
-
 }

@@ -5,6 +5,7 @@ import nu.xom.*;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -12,6 +13,8 @@ import java.util.Set;
 
 import Objects.*;
 import org.reflections.Reflections;
+
+import javax.sound.midi.SysexMessage;
 
 /**
  * This class is used when the user wants to create DI through an XML file.
@@ -22,10 +25,15 @@ public class XMLGrapevineContext extends GrapevineContext {
      * The path where the XML is located. Passed as an argument
      */
     private String argument;
+    /**
+     * Does the class have an autowired dependency?
+     * */
+    private boolean autowired;
 
     public XMLGrapevineContext(String argument){
         this.argument = argument;
         this.growGrapes();
+        autowired = false;
     }
 
     /**
@@ -100,6 +108,7 @@ public class XMLGrapevineContext extends GrapevineContext {
             Attribute attribute = temp.getAttribute(i); //instantiates a specific attribute (eg. id = "1")
             String name = attribute.getQualifiedName(); //takes the attribute name (eg. id)
             String value = attribute.getValue(); //takes the attribute value (eg. "1")
+
             switch (name) {
                 case("id"):
                     grape.setId(value);
@@ -117,10 +126,8 @@ public class XMLGrapevineContext extends GrapevineContext {
 
                 case ("scope"):
                     if(value.equals("singleton")) {
-
-                            grape.setSingleton(true);
-                            super.singletonGrapes.put(grape.getId(), null); //create a new instance of the grape and store it in its map
-
+                        grape.setSingleton(true);
+                        super.singletonGrapes.put(grape.getId(), null); //create a new instance of the grape and store it in its map
                     }
                     else
                         grape.setSingleton(false);
@@ -154,17 +161,63 @@ public class XMLGrapevineContext extends GrapevineContext {
                     break;
 
                 case ("property"):
+                    if (grape.getGrapeClass() != null) {
+                        if (value.equals("type")) {
+                            autowired =! autowired;
+                            grape.setAutowiring("type");
+                        } else if (value.equals("name")) {
+                            autowired =! autowired;
+                            grape.setAutowiring("name");
+                        } else if (value.equals("no") && autowired)  {
+                            searchAndCreateDep(grape);
+                            return;
+                        }
+                    } else {
+                        System.err.print("Objects.Grape parameters not in correct order. Class should be before methods. ");
+                    }
                     break;
 
                 default:
                     System.err.print("Invalid parameter " + name);
                     break;
-
             }
         }
-
-
         super.grapes.put(grape.getId(), grape);
+    }
+
+    private void searchAndCreateDep(Grape grape) {
+        Set<String> keySet = grapes.keySet();
+        for (String key : keySet) {
+            Grape toAnalyze = grapes.get(key);
+            Class toAnalyzeClass = toAnalyze.getClass();
+            Field[] fields = toAnalyzeClass.getFields();
+            try {
+                Field privateField = toAnalyzeClass.getDeclaredField(grape.getId());
+                if (privateField != null) {
+                    grapeToSeed(grape, key);
+                }
+            } catch (NoSuchFieldException e) {
+                for (Field field : fields) {
+                    if (field.toString().equalsIgnoreCase(grape.getId())) {
+                        grapeToSeed(grape, key);
+                    }
+                }
+            }
+        }
+    }
+
+    private Seed grapeToSeed(Grape grape, String dad) {
+        Seed seed = new Seed();
+        seed.setId(grape.getId());
+        seed.setValue(grape.getId());
+        seed.setIsConstructor(false);
+        try {
+            seed.setSeedClass(Class.forName("Examples."+dad));
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        seed.setRef(false);
+        return seed;
     }
 
     /**
@@ -174,27 +227,8 @@ public class XMLGrapevineContext extends GrapevineContext {
      * @param temp current Element to be instantiated as seed.
      */
     private void createSeed(Element temp) {
-        /*Mas o menos así funciona el autowired para XML, es un sustituto para el campo de constructor en la construccion
-        * del XML*/
-        String namae = temp.getClass().getSimpleName();
-        Reflections currentClassReflectionTool = new Reflections("/" + namae);/*Falta el path pero no se que poner o conseguirlo*/
-        Set<Method> autowireGrape = currentClassReflectionTool.getMethodsAnnotatedWith(AutowireGrape.class);
-        Iterator<Method> iterator = autowireGrape.iterator();
 
-        /*Este seed es del método original*/
         Seed seed = new Seed();
-
-        /*Iterador del autowired*/
-        while (iterator.hasNext()) {/*Puede haber mas de una cosa con autowired*/
-            Method trialMethod = iterator.next();/*Pueden haber atributos con autowired, eso se filtra adelantico*/
-            if (trialMethod.getName().startsWith("set")) { /*Si el método marcado con autowired inicia con set, es setter*/
-                seed.setIsConstructor(false);
-            } else if (trialMethod.getName().equals(namae)) {
-                seed.setIsConstructor(true);
-            }
-        }
-
-        /*El resto normal*/
         for(int i = 0; i < temp.getAttributeCount(); i++) { //same principle as createGrape
             Attribute attribute = temp.getAttribute(i);
             String name = attribute.getQualifiedName();
@@ -245,9 +279,7 @@ public class XMLGrapevineContext extends GrapevineContext {
                 default:
                     System.err.print("Invalid parameter " + name);
                     break;
-
             }
-
         }
 
         Element parent = (Element) temp.getParent();
@@ -259,7 +291,6 @@ public class XMLGrapevineContext extends GrapevineContext {
             buildWithConstructors(parentGrape.getId());
         else
             buildWithSetters(parentGrape.getId());
-
     }
 
     /**
