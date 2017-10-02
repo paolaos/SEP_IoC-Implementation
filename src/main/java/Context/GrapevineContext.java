@@ -11,11 +11,6 @@ import Objects.*;
  */
 public abstract class GrapevineContext {
     /**
-     * Identifies all the grapes associated to another grape by the autowire annotation
-     * */
-    protected Map<String, List<Grape>> autowiredDependencies;
-
-    /**
      * Identifies all grapes with its name for a faster search
      */
     protected Map<String, Grape> grapes;
@@ -31,7 +26,6 @@ public abstract class GrapevineContext {
     protected Map<String, Object> singletonGrapes;
 
     public GrapevineContext(){
-        autowiredDependencies = new TreeMap<>();
         dependencies = new TreeMap<>();
         singletonGrapes = new TreeMap<>();
         grapes = new TreeMap<>();
